@@ -10,7 +10,7 @@ function validate(schema) {
       }));
       return res.status(400).json({
         success: false,
-        error: "Validatsiya xatosi",
+        error: "iltimos maydonlarni toldiring",
         datails: errors,
       });
     }

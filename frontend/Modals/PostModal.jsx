@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { createPosts } from "../api/post";
-
 import { toast } from "sonner";
 
 function PostModal({ isOpen, onClose, onPostCreated }) {
@@ -9,6 +8,12 @@ function PostModal({ isOpen, onClose, onPostCreated }) {
     content: "",
     authorId: "",
     published: false,
+  });
+
+  const [errors, setErrors] = useState({
+    title: "",
+    content: "",
+    authorId: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -22,15 +27,35 @@ function PostModal({ isOpen, onClose, onPostCreated }) {
       ...form,
       [name]: type === "checkbox" ? checked : value,
     });
+
+    if (errors[name]) {
+      setErrors({
+        ...errors,
+        [name]: "",
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const newErrors = {
+      title: form.title.trim() ? "" : "Sarlavha kiritilishi shart",
+      content: form.content.trim() ? "" : "Matn kiritilishi shart",
+      authorId: form.authorId.toString().trim()
+        ? ""
+        : "Author ID kiritilishi shart",
+    };
+
+    setErrors(newErrors);
+
+    const hasError = Object.values(newErrors).some((msg) => msg !== "");
+    if (hasError) return;
+
     try {
       setLoading(true);
 
-      const newPost = await createPost({
+      const newPost = await createPosts({
         title: form.title,
         content: form.content,
         authorId: Number(form.authorId),
@@ -45,11 +70,13 @@ function PostModal({ isOpen, onClose, onPostCreated }) {
         authorId: "",
         published: false,
       });
+      setErrors({ title: "", content: "", authorId: "" });
 
       onPostCreated(newPost);
       onClose();
     } catch (error) {
-      toast.error(error.message || "Post qo‘shishda xatolik");
+      console.log(error.message);
+      toast.error("Post qo‘shishda xatolik");
     } finally {
       setLoading(false);
     }
@@ -71,32 +98,47 @@ function PostModal({ isOpen, onClose, onPostCreated }) {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            name="title"
-            value={form.title}
-            onChange={handleChange}
-            placeholder="Title"
-            className="w-full rounded-lg border border-slate-200 px-4 py-3 outline-none focus:border-slate-400"
-          />
+          <div>
+            <input
+              type="text"
+              name="title"
+              value={form.title}
+              onChange={handleChange}
+              placeholder="Title"
+              className="w-full rounded-lg border border-slate-200 px-4 py-3 outline-none focus:border-slate-400"
+            />
+            {errors.title && (
+              <p className="mt-1 text-sm text-red-500">{errors.title}</p>
+            )}
+          </div>
 
-          <textarea
-            name="content"
-            value={form.content}
-            onChange={handleChange}
-            placeholder="Content"
-            rows="5"
-            className="w-full resize-none rounded-lg border border-slate-200 px-4 py-3 outline-none focus:border-slate-400"
-          />
+          <div>
+            <textarea
+              name="content"
+              value={form.content}
+              onChange={handleChange}
+              placeholder="Content"
+              rows="5"
+              className="w-full resize-none rounded-lg border border-slate-200 px-4 py-3 outline-none focus:border-slate-400"
+            />
+            {errors.content && (
+              <p className="mt-1 text-sm text-red-500">{errors.content}</p>
+            )}
+          </div>
 
-          <input
-            type="number"
-            name="authorId"
-            value={form.authorId}
-            onChange={handleChange}
-            placeholder="Author ID"
-            className="w-full rounded-lg border border-slate-200 px-4 py-3 outline-none focus:border-slate-400"
-          />
+          <div>
+            <input
+              type="number"
+              name="authorId"
+              value={form.authorId}
+              onChange={handleChange}
+              placeholder="Author ID"
+              className="w-full rounded-lg border border-slate-200 px-4 py-3 outline-none focus:border-slate-400"
+            />
+            {errors.authorId && (
+              <p className="mt-1 text-sm text-red-500">{errors.authorId}</p>
+            )}
+          </div>
 
           <label className="flex items-center gap-3 text-sm text-slate-600">
             <input
