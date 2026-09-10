@@ -4,6 +4,10 @@ export const getPosts = async () => {
   const response = await client.get("/posts");
   return response.data.data;
 };
+export const createPosts = async () => {
+  const response = await client.post("/posts");
+  return response.data.data;
+};
 
 export const getPostById = async (id) => {
   const response = await client.get(`/posts/${id}`);
