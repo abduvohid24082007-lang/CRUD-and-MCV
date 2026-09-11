@@ -1,8 +1,7 @@
-const { success } = require("zod");
-
 function validate(schema) {
   return (req, res, next) => {
     const result = schema.safeParse(req.body);
+
     if (!result.success) {
       const errors = result.error.issues.map((issues) => ({
         field: issues.path.join("."),
@@ -18,4 +17,5 @@ function validate(schema) {
     next();
   };
 }
+
 module.exports = validate;

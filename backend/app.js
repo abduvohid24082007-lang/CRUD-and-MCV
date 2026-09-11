@@ -159,6 +159,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const usersRoutes = require("./src/routes/user.routes");
 const postRoutes = require("./src/routes/post.routes");
+const authRoutes = require("./src/routes/auth.routes");
 
 const app = express();
 
@@ -168,6 +169,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/users", usersRoutes);
 app.use("/posts", postRoutes);
+app.use("/auth", authRoutes);
 
 app.get("/", (req, res) => {
   res.json({ success: true, message: "Blog api ishlamoqda" });
