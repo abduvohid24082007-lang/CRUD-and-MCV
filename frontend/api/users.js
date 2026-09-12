@@ -25,3 +25,11 @@ export const deleteUser = async (id) => {
   const response = await client.delete(`/users/${id}`);
   return response.data;
 };
+export const loginUser = async (credentials) => {
+  const response = await client.post("/auth/login", credentials);
+  return response.data;
+};
+export const registerUser = async (userData) => {
+  const response = await client.post("/auth/register", userData);
+  return response.data;
+};

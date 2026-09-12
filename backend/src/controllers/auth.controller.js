@@ -4,7 +4,7 @@ const prisma = require("../prisma");
 const { success } = require("zod");
 //
 const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_EXPRIES_IN = process.env.JWT_EXPRIES_IN || "1h";
+const JWT_EXPIRES_IN = process.env.JWT_EXPRIES_IN || "2h";
 //
 const register = async (req, res) => {
   try {
