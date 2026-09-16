@@ -20,6 +20,11 @@ export const updatePost = async (id, post) => {
 };
 
 export const deletePost = async (id) => {
-  const response = await client.delete(`/posts/${id}`);
+  const token = localStorage.getItem("token");
+  const response = await client.delete(`/posts/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return response.data;
 };

@@ -6,11 +6,23 @@ const {
   createPostSchema,
   updatePostSchema,
 } = require("../validations/post.validations");
+const authMiddleware = require("../middlewares/auth");
 
 router.get("/", postsController.getAllPosts);
 router.get("/:id", postsController.getPostById);
-router.post("/", validate(createPostSchema), postsController.createPost);
-router.put("/:id", validate(updatePostSchema), postsController.updatePost);
-router.delete("/:id", postsController.deletePost);
+
+router.post(
+  "/",
+  authMiddleware,
+  validate(createPostSchema),
+  postsController.createPost,
+);
+router.put(
+  "/:id",
+  authMiddleware,
+  validate(updatePostSchema),
+  postsController.updatePost,
+);
+router.delete("/:id", authMiddleware, postsController.deletePost);
 
 module.exports = router;

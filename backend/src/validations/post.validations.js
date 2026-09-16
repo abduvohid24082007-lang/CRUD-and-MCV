@@ -7,7 +7,7 @@ const createPostSchema = z.object({
   content: z
     .string()
     .min(10, "Matn kamida 10 ta belgidan iborat bo‘lishi kerak"),
-  authorId: z.number().int().positive("authorId musbat son bo‘lishi kerak"),
+
   published: z.boolean().optional(),
 });
 

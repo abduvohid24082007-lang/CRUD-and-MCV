@@ -1,3 +1,4 @@
+const { success } = require("zod");
 const prisma = require("../prisma");
 
 const getAllPosts = async (req, res) => {
@@ -62,6 +63,16 @@ const updatePost = async (req, res) => {
       where: { id: Number(id) },
       data: req.body,
     });
+    if (post.authorId !== req.user.userId) {
+      return res.status(403).json({
+        success: false,
+        error: "postni ozgartirishga ruxsatingiz yoq",
+      });
+    }
+    await prisma.post.update({
+      where: { id },
+      data: req.body,
+    });
     res.json({ success: true, data: post });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -75,6 +86,12 @@ const deletePost = async (req, res) => {
     const post = await prisma.post.findUnique({ where: { id: Number(id) } });
     if (!post) {
       return res.status(404).json({ success: false, error: "Post topilmadi" });
+    }
+    if (post.authorId !== req.user.userId) {
+      return res.status(403).json({
+        success: false,
+        error: "ochirishga ruxsat yoq",
+      });
     }
 
     await prisma.post.delete({ where: { id: Number(id) } });

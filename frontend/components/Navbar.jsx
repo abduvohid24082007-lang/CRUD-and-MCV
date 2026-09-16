@@ -29,6 +29,7 @@ function Navbar() {
     { name: "Emails", path: "/emails", icon: "✉️" },
     { name: "Posts", path: "/posts", icon: "📝" },
     { name: "Names", path: "/names", icon: "👤" },
+    { name: "profil", path: "/profil", icon: "👤" },
   ];
 
   const authLinks = [

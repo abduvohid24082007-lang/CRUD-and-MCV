@@ -7,6 +7,7 @@ import Posts from "../pages/Posts";
 import Register from "../pages/Register";
 import UserDetails from "../pages/UserDetails";
 import PostDetails from "../pages/PostDetails";
+import Profil from "../pages/Profil";
 import Login from "../pages/Login";
 
 function App() {
@@ -26,6 +27,8 @@ function App() {
           {/* Posts */}
           <Route path="/posts" element={<Posts />} />
           <Route path="/posts/:id" element={<PostDetails />} />
+          {/* profil */}
+          <Route path="/profil" element={<Profil />} />
         </Routes>
       </main>
     </div>

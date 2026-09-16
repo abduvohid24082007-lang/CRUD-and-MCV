@@ -60,7 +60,11 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
+    console.log("Delete funksiya ishladi");
     const { id } = req.params;
+    console.log(id);
+    const user = await prisma.user.findUnique({ where: { id: Number(id) } });
+    console.log(user);
     await prisma.user.delete({ where: { id: Number(id) } });
     res.json({ success: true, message: "User o'chirildi" });
   } catch (error) {
