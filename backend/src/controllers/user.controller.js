@@ -72,10 +72,68 @@ const deleteUser = async (req, res) => {
   }
 };
 
+// Tizimga kirgan foydalanuvchining o'z ma'lumotlarini olish (token orqali)
+const getMe = async (req, res) => {
+  try {
+    const userId = req.user.userId || req.user.id;
+
+    const user = await prisma.user.findUnique({
+      where: { id: Number(userId) },
+      include: {
+        _count: { select: { post: true } },
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({ success: false, error: "User topilmadi" });
+    }
+
+    const { password: _, ...userWithoutPassword } = user;
+
+    res.json({ success: true, data: userWithoutPassword });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+const uploadAvatar = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        error: "Fayl yuklanmadi",
+      });
+    }
+
+    const avatarPath = `/uploads/${req.file.filename}`;
+
+    const userId = req.user.userId || req.user.id;
+
+    const user = await prisma.user.update({
+      where: { id: Number(userId) },
+      data: { avatar: avatarPath },
+    });
+
+    const { password: _, ...userWithoutPassword } = user;
+
+    res.json({
+      success: true,
+      data: {
+        user: userWithoutPassword,
+        avatar: avatarPath,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
 module.exports = {
   getAllUsers,
   getUserById,
   createUser,
   updateUser,
   deleteUser,
+  getMe,
+  uploadAvatar,
 };

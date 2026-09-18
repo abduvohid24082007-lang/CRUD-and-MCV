@@ -12,7 +12,7 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     const ext = path.extname(file.originalname);
-    (cb, (null, `avatar-${req.user.userId}-${uniqueSuffix}${ext}`));
+    cb(null, `avatar-${req.user.userId}-${uniqueSuffix}${ext}`);
   },
 });
 const fileFilter = (req, file, cb) => {
@@ -23,3 +23,14 @@ const fileFilter = (req, file, cb) => {
     cb(new Error("faqat jpeg,png webp rasimlarni yuklash mumkin"));
   }
 };
+const limits = {
+  fileSize: 5 * 1024 * 1024,
+};
+
+const upload = multer({
+  storage,
+  fileFilter,
+  limits,
+});
+
+module.exports = upload;

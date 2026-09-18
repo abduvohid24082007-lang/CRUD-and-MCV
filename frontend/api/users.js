@@ -33,3 +33,19 @@ export const registerUser = async (userData) => {
   const response = await client.post("/auth/register", userData);
   return response.data;
 };
+
+export const getMe = async () => {
+  const response = await client.get("/users/me");
+  return response.data.data;
+};
+
+export const uploadAvatar = async (file) => {
+  const formData = new FormData();
+  formData.append("avatar", file);
+
+  const response = await client.post("/users/me/avatar", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+
+  return response.data.data;
+};

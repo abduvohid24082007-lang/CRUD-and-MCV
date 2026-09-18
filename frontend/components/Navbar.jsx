@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { getImageUrl } from "../src/untils/imageUrl";
 
 function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const avatarUrl = getImageUrl(user?.avatar);
 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
@@ -89,6 +91,13 @@ function Navbar() {
 
         {user ? (
           <div className="flex items-center gap-3">
+            {avatarUrl && (
+              <img
+                src={avatarUrl}
+                alt={user.name}
+                className="h-10 w-10 rounded-full object-cover border border-gray-200"
+              />
+            )}
             <span className="text-sm font-semibold text-gray-700">
               👤 {user.name}
             </span>
